@@ -1,6 +1,12 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
+
+type Guest = {
+  firstName: string;
+  fullName: string;
+  responded: boolean;
+};
 
 const wedding = {
   couple: "Алексей & София",
@@ -21,10 +27,67 @@ const schedule = [
 
 export default function Home() {
   const [sent, setSent] = useState(false);
+  const [guest, setGuest] = useState<Guest | null>(null);
+  const [inviteToken, setInviteToken] = useState("");
+  const [inviteState, setInviteState] = useState<"idle" | "loading" | "ready" | "invalid">("idle");
+  const [submitting, setSubmitting] = useState(false);
+  const [formError, setFormError] = useState("");
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  useEffect(() => {
+    const token = new URLSearchParams(window.location.search).get("invite")?.trim() ?? "";
+
+    if (!token) {
+      setInviteState("invalid");
+      return;
+    }
+
+    setInviteToken(token);
+    setInviteState("loading");
+
+    fetch(`/api/invite?token=${encodeURIComponent(token)}`)
+      .then(async (response) => {
+        if (!response.ok) throw new Error("Invitation not found");
+        return response.json() as Promise<{ guest: Guest }>;
+      })
+      .then((data) => {
+        setGuest(data.guest);
+        setInviteState("ready");
+      })
+      .catch(() => setInviteState("invalid"));
+  }, []);
+
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setSent(true);
+    setFormError("");
+
+    if (!inviteToken || !guest) {
+      setFormError("Откройте персональную ссылку из приглашения.");
+      return;
+    }
+
+    const formData = new FormData(event.currentTarget);
+    setSubmitting(true);
+
+    try {
+      const response = await fetch("/api/rsvp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          token: inviteToken,
+          attendance: formData.get("attendance"),
+          plusOne: formData.get("plusOne"),
+          note: formData.get("note"),
+          website: formData.get("website"),
+        }),
+      });
+
+      if (!response.ok) throw new Error("Could not save response");
+      setSent(true);
+    } catch {
+      setFormError("Не получилось сохранить ответ. Попробуйте ещё раз через минуту.");
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   return (
@@ -41,7 +104,7 @@ export default function Home() {
 
       <section className="hero" id="top">
         <div className="hero-copy reveal">
-          <p className="eyebrow">Мы женимся</p>
+          <p className="eyebrow">{guest ? `${guest.firstName}, мы женимся` : "Мы женимся"}</p>
           <h1><span>{wedding.firstName}</span><i>&</i><span>{wedding.secondName}</span></h1>
           <div className="hero-meta">
             <p>{wedding.date}</p>
@@ -130,29 +193,44 @@ export default function Home() {
       <section className="rsvp" id="rsvp">
         <div className="rsvp-copy">
           <p className="section-number">05 / ваше решение</p>
-          <p className="script-note">Очень ждём вас</p>
+          <p className="script-note">{guest ? `${guest.firstName}, очень ждём вас` : "Очень ждём вас"}</p>
           <h2>Получится<br />быть с нами?</h2>
           <p>Пожалуйста, дайте ответ до 18 июля 2026 года.</p>
         </div>
 
-        {sent ? (
+        {inviteState === "loading" ? (
+          <div className="invite-note" role="status">
+            <span className="invite-loader" aria-hidden="true" />
+            <p>Готовим ваше персональное приглашение…</p>
+          </div>
+        ) : inviteState === "invalid" ? (
+          <div className="invite-note" role="status">
+            <span>✦</span>
+            <h3>Нужна персональная ссылка</h3>
+            <p>Пожалуйста, откройте ссылку, которую мы отправили вам лично. Так ответ попадёт в правильную строку списка гостей.</p>
+          </div>
+        ) : sent ? (
           <div className="success" role="status">
             <span>✓</span>
             <h3>Ответ принят</h3>
-            <p>Спасибо! Мы очень рады, что вы будете частью нашего дня.</p>
+            <p>Спасибо, {guest?.firstName}! Ответ сохранён в нашем списке гостей.</p>
             <button type="button" onClick={() => setSent(false)}>Изменить ответ</button>
           </div>
         ) : (
           <form onSubmit={handleSubmit}>
-            <label>Ваше имя<input name="name" required placeholder="Имя и фамилия" /></label>
+            <label>Ваше имя<input name="name" value={guest?.fullName ?? ""} readOnly aria-readonly="true" /></label>
             <fieldset>
               <legend>Вы сможете прийти?</legend>
               <label className="radio"><input type="radio" name="attendance" value="yes" required /><span>Да, с удовольствием</span></label>
               <label className="radio"><input type="radio" name="attendance" value="no" /><span>К сожалению, не смогу</span></label>
             </fieldset>
-            <label>С кем вы будете?<input name="plusOne" placeholder="Имя спутника / спутницы" /></label>
-            <label>Пожелания<textarea name="note" rows={3} placeholder="Аллергии, любимая песня или пара теплых слов" /></label>
-            <button className="submit-button" type="submit">Отправить ответ <span aria-hidden="true">→</span></button>
+            <label>С кем вы будете?<input name="plusOne" maxLength={120} placeholder="Имя спутника / спутницы" /></label>
+            <label>Пожелания<textarea name="note" maxLength={1000} rows={3} placeholder="Аллергии, любимая песня или пара теплых слов" /></label>
+            <label className="honeypot" aria-hidden="true">Ваш сайт<input name="website" tabIndex={-1} autoComplete="off" /></label>
+            {formError && <p className="form-error" role="alert">{formError}</p>}
+            <button className="submit-button" type="submit" disabled={submitting}>
+              {submitting ? "Сохраняем…" : "Отправить ответ"} <span aria-hidden="true">→</span>
+            </button>
           </form>
         )}
       </section>
