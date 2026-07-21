@@ -207,14 +207,29 @@ export default function Home() {
           rel="noreferrer"
           aria-label="Открыть Отдел ЗАГС Петроградского района в Яндекс Картах"
         >
-          <Image
-            className="map-image"
-            src="/zags-yandex-map.png"
-            alt="Карта расположения Отдела ЗАГС Петроградского района"
-            fill
-            sizes="(max-width: 850px) 100vw, 52vw"
-          />
-          <span className="map-link-label">Открыть ЗАГС в Яндекс Картах <b aria-hidden="true">↗</b></span>
+          <div className="route-map" aria-hidden="true">
+            <div className="route-river"><span>набережная реки Карповки</span></div>
+            <div className="route-block route-block-one" />
+            <div className="route-block route-block-two" />
+            <div className="route-block route-block-three" />
+            <div className="route-road route-kamennoostrovsky"><span>Каменноостровский пр.</span></div>
+            <div className="route-road route-monetnaya"><span>Большая Монетная ул.</span></div>
+            <div className="route-road route-mira"><span>ул. Мира</span></div>
+            <span className="walk-segment walk-segment-one" />
+            <span className="walk-segment walk-segment-two" />
+            <span className="route-turn" />
+            <div className="route-start">
+              <span className="metro-symbol">М</span>
+              <p><small>старт</small><strong>Петроградская</strong></p>
+            </div>
+            <div className="route-finish">
+              <span className="route-pin"><i>17</i></span>
+              <p><small>финиш</small><strong>Отдел ЗАГС<br />Петроградского района</strong></p>
+            </div>
+            <p className="route-duration"><strong>≈ 10 минут</strong><span>пешком · 750 м</span></p>
+            <span className="route-north">С</span>
+          </div>
+          <span className="map-link-label">Открыть маршрут в Яндекс Картах <b aria-hidden="true">↗</b></span>
         </a>
       </section>
 
