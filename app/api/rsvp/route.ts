@@ -11,7 +11,6 @@ export async function POST(request: Request) {
     const body = (await request.json()) as Record<string, unknown>;
     const token = cleanText(body.token, 32);
     const attendance = cleanText(body.attendance, 3);
-    const plusOne = cleanText(body.plusOne, 120);
     const note = cleanText(body.note, 1000);
     const website = cleanText(body.website, 200);
 
@@ -21,7 +20,7 @@ export async function POST(request: Request) {
       return Response.json({ error: "Проверьте обязательные поля" }, { status: 400 });
     }
 
-    await callGoogleScript("rsvp", { token, attendance, plusOne, note });
+    await callGoogleScript("rsvp", { token, attendance, note });
     return Response.json({ ok: true });
   } catch {
     return Response.json({ error: "Не удалось сохранить ответ" }, { status: 502 });
