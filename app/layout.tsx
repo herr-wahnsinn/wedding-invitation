@@ -2,8 +2,20 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Алексей & София — 18 августа 2026",
-  description: "Приглашение на нашу свадьбу. Будем счастливы разделить этот день с вами.",
+  metadataBase: new URL("https://wedding-invitation-taupe-nine.vercel.app"),
+  title: "Андрей & Лиля — 16 сентября 2026",
+  description: "Приглашение на свадьбу Андрея и Лили в Санкт-Петербурге.",
+  openGraph: {
+    title: "Андрей & Лиля — 16 сентября 2026",
+    description: "Приглашение на свадьбу Андрея и Лили в Санкт-Петербурге.",
+    images: [{ url: "/og.png", width: 1733, height: 909, alt: "Андрей и Лиля" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Андрей & Лиля — 16 сентября 2026",
+    description: "Приглашение на свадьбу Андрея и Лили в Санкт-Петербурге.",
+    images: ["/og.png"],
+  },
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
