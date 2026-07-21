@@ -19,8 +19,8 @@ const wedding = {
 };
 
 const schedule = [
-  { time: "ЗАГС", title: "Регистрация", text: "Отдел ЗАГС Петроградского района · Большая Монетная ул., 17." },
-  { time: "Банкет", title: "Ресторан Vinity", text: "Фурштатская ул., 52 · семейный ужин, тосты и танцы." },
+  { time: "10:00", label: "ЗАГС", title: "Регистрация", text: "Отдел ЗАГС Петроградского района · Большая Монетная ул., 17." },
+  { time: "16:00", label: "Банкет", title: "Ресторан Vinity", text: "Фурштатская ул., 52 · семейный ужин, тосты и танцы." },
 ];
 
 const venues = [
@@ -28,17 +28,26 @@ const venues = [
     label: "Церемония",
     name: "Отдел ЗАГС Петроградского района",
     address: "Большая Монетная ул., 17, Санкт-Петербург",
-    mapUrl: "https://www.google.com/search?sca_esv=1e1e55aabb50fa0b&sxsrf=APpeQnuzMuyfbtP7cK5ZJwCPFCAwHX5TkQ:1784636595816&q=%D0%BE%D1%82%D0%B4%D0%B5%D0%BB+%D0%B7%D0%B0%D0%B3%D1%81+%D0%BF%D0%B5%D1%82%D1%80%D0%BE%D0%B3%D1%80%D0%B0%D0%B4%D1%81%D0%BA%D0%BE%D0%B3%D0%BE+%D1%80%D0%B0%D0%B9%D0%BE%D0%BD%D0%B0+%D0%B0%D0%B4%D1%80%D0%B5%D1%81&ludocid=4501468994677333700&sa=X&ved=2ahUKEwjH_eGy4eOVAxXvzwIHHZn-GmkQ6BN6BAgcEAI",
+    mapUrl: "https://yandex.com/maps/-/CTVlr845",
   },
   {
     label: "Банкет",
     name: "Ресторан Vinity",
     address: "Фурштатская ул., 52, Санкт-Петербург",
-    mapUrl: "https://yandex.com/maps/org/vinity/1261311115/?yclid=",
+    mapUrl: "https://yandex.com/maps/-/CTVlvALU",
   },
 ];
 
-const dressCodeColors = ["#79553d", "#1e5945", "#755c48", "#ac7580", "#641c34", "#4f7942", "#321414", "#556B2F"];
+const dressCodeColors = [
+  { value: "#1e5945", name: "Глубокий зелёный" },
+  { value: "#4f7942", name: "Лесной оливковый" },
+  { value: "#556B2F", name: "Тёмный оливковый" },
+  { value: "#755c48", name: "Тёплый коричневый" },
+  { value: "#79553d", name: "Терракотовый" },
+  { value: "#321414", name: "Тёмный шоколад" },
+  { value: "#641c34", name: "Винный" },
+  { value: "#ac7580", name: "Пыльная роза" },
+];
 
 export default function Home() {
   const [sent, setSent] = useState(false);
@@ -167,7 +176,7 @@ export default function Home() {
         <div className="timeline">
           {schedule.map((item, index) => (
             <article className="timeline-item" key={item.time}>
-              <div className="time"><span>0{index + 1}</span>{item.time}</div>
+              <div className="time"><span>{item.label} · 0{index + 1}</span>{item.time}</div>
               <div><h3>{item.title}</h3><p>{item.text}</p></div>
               <span className="timeline-dot" aria-hidden="true" />
             </article>
@@ -191,12 +200,22 @@ export default function Home() {
             ))}
           </div>
         </div>
-        <div className="map-art" aria-hidden="true">
-          <span className="road r1" /><span className="road r2" /><span className="road r3" />
-          <span className="river" /><span className="park p1" /><span className="park p2" />
-          <div className="pin"><span>A&L</span></div>
-          <p>САНКТ-ПЕТЕРБУРГ · 59.94° N</p>
-        </div>
+        <a
+          className="map-art"
+          href={venues[0].mapUrl}
+          target="_blank"
+          rel="noreferrer"
+          aria-label="Открыть Отдел ЗАГС Петроградского района в Яндекс Картах"
+        >
+          <Image
+            className="map-image"
+            src="/zags-yandex-map.png"
+            alt="Карта расположения Отдела ЗАГС Петроградского района"
+            fill
+            sizes="(max-width: 850px) 100vw, 52vw"
+          />
+          <span className="map-link-label">Открыть ЗАГС в Яндекс Картах <b aria-hidden="true">↗</b></span>
+        </a>
       </section>
 
       <section className="dress-code">
@@ -205,9 +224,14 @@ export default function Home() {
           <h2>Наряды, в которых<br />хочется <i>танцевать</i></h2>
         </div>
         <div className="dress-copy">
-          <p>Будем рады, если вы поддержите палитру вечера. Выбирайте комфортные образы в природных и винных оттенках.</p>
+          <p>Будем рады, если вы поддержите тёплую палитру осени: глубокий оливковый, благородный терракотовый, уютный коричневый и мягкая пыльная роза. Выбирайте оттенок, в котором вам будет комфортно праздновать и танцевать вместе с нами.</p>
           <div className="palette" aria-label="Палитра дресс-кода">
-            {dressCodeColors.map((color) => <span key={color} style={{ backgroundColor: color }} aria-label={color} />)}
+            {dressCodeColors.map((color) => (
+              <button className="palette-color" type="button" key={color.value} aria-label={color.name} title={color.name}>
+                <span className="color-swatch" style={{ backgroundColor: color.value }} />
+                <span className="color-name">{color.name}</span>
+              </button>
+            ))}
           </div>
         </div>
       </section>
