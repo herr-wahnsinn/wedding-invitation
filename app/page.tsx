@@ -11,9 +11,9 @@ type Guest = {
 };
 
 const wedding = {
-  couple: "Андрей & Лиля",
+  couple: "Андрей & Лилия",
   firstName: "Андрей",
-  secondName: "Лиля",
+  secondName: "Лилия",
   date: "16 сентября 2026",
   city: "Санкт-Петербург",
 };
@@ -56,6 +56,7 @@ export default function Home() {
   const [inviteState, setInviteState] = useState<"idle" | "loading" | "ready" | "invalid">("idle");
   const [submitting, setSubmitting] = useState(false);
   const [formError, setFormError] = useState("");
+  const [attendanceChoice, setAttendanceChoice] = useState<"yes" | "no" | "">("");
 
   useEffect(() => {
     const token = new URLSearchParams(window.location.search).get("invite")?.trim() ?? "";
@@ -90,6 +91,14 @@ export default function Home() {
     }
 
     const formData = new FormData(event.currentTarget);
+    const attendance = String(formData.get("attendance") ?? "");
+    const drinks = formData.getAll("drinks").map(String);
+
+    if (attendance === "yes" && drinks.length === 0) {
+      setFormError("Пожалуйста, выберите хотя бы один вариант напитков.");
+      return;
+    }
+
     setSubmitting(true);
 
     try {
@@ -98,7 +107,9 @@ export default function Home() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           token: inviteToken,
-          attendance: formData.get("attendance"),
+          attendance,
+          drinks,
+          meal: formData.get("meal"),
           note: formData.get("note"),
           website: formData.get("website"),
         }),
@@ -133,13 +144,16 @@ export default function Home() {
             <p>{wedding.date}</p>
             <p>{wedding.city}</p>
           </div>
-          <a className="primary-link" href="#rsvp">Будем вместе? <span aria-hidden="true">→</span></a>
+          <a className="primary-link" href="#rsvp">
+            <span className="primary-link-copy"><strong>Заполнить анкету</strong><small>RSVP · займёт 2 минуты</small></span>
+            <span className="primary-link-arrow" aria-hidden="true">→</span>
+          </a>
         </div>
 
         <div className="hero-art" aria-hidden="true">
           <div className="flower flower-one"><span /><span /><span /><span /></div>
           <div className="portrait-frame">
-            <Image className="hero-photo" src="/andrey-lilya-rooftop.jpg" alt="Андрей и Лиля вместе" fill priority sizes="(max-width: 850px) 87vw, 42vw" />
+            <Image className="hero-photo" src="/andrey-lilya-rooftop.jpg" alt="Андрей и Лилия вместе" fill priority sizes="(max-width: 850px) 87vw, 42vw" />
             <div className="portrait-caption">love · laughter · forever</div>
           </div>
           <div className="date-stamp"><strong>16</strong><span>09 / 26</span></div>
@@ -158,7 +172,7 @@ export default function Home() {
           <p>И мы поняли, что этот момент — быть вместе, всегда.</p>
           <p>С любовью приглашаем вас на нашу свадьбу, наш первый семейный праздник. Мы будем очень счастливы, если вы будете с нами в этот день!</p>
           <figure className="story-photo">
-            <Image src="/andrey-lilya-travel.jpg" alt="Андрей и Лиля в путешествии" width={1600} height={1200} sizes="(max-width: 850px) 86vw, 24vw" />
+            <Image src="/andrey-lilya-travel.jpg" alt="Андрей и Лилия в путешествии" width={1600} height={1200} sizes="(max-width: 850px) 86vw, 24vw" />
             <figcaption>наша история продолжается</figcaption>
           </figure>
         </div>
@@ -282,9 +296,31 @@ export default function Home() {
             <label>{guest?.addressForm === "ты" ? "Твоё имя" : "Ваше приглашение"}<input name="name" value={guest?.fullName ?? ""} readOnly aria-readonly="true" /></label>
             <fieldset>
               <legend>{guest?.addressForm === "ты" ? "Ты сможешь прийти?" : "Вы сможете прийти?"}</legend>
-              <label className="radio"><input type="radio" name="attendance" value="yes" required /><span>Да, с удовольствием</span></label>
-              <label className="radio"><input type="radio" name="attendance" value="no" /><span>{guest?.addressForm === "ты" ? "К сожалению, не смогу" : "К сожалению, не сможем"}</span></label>
+              <label className="radio"><input type="radio" name="attendance" value="yes" required onChange={() => setAttendanceChoice("yes")} /><span>Да, с удовольствием</span></label>
+              <label className="radio"><input type="radio" name="attendance" value="no" onChange={() => setAttendanceChoice("no")} /><span>{guest?.addressForm === "ты" ? "К сожалению, не смогу" : "К сожалению, не сможем"}</span></label>
             </fieldset>
+            {attendanceChoice === "yes" && (
+              <div className="survey-details">
+                <fieldset className="survey-fieldset">
+                  <legend>Какие напитки предпочитаете?</legend>
+                  <p className="field-hint">Можно выбрать несколько вариантов</p>
+                  <div className="choice-grid">
+                    <label className="check"><input type="checkbox" name="drinks" value="Игристое" /><span>Игристое</span></label>
+                    <label className="check"><input type="checkbox" name="drinks" value="Вино" /><span>Вино</span></label>
+                    <label className="check"><input type="checkbox" name="drinks" value="Крепкий алкоголь" /><span>Крепкий алкоголь</span></label>
+                    <label className="check"><input type="checkbox" name="drinks" value="Безалкогольные" /><span>Безалкогольные</span></label>
+                  </div>
+                </fieldset>
+                <fieldset className="survey-fieldset">
+                  <legend>Что предпочитаете на горячее?</legend>
+                  <div className="choice-grid meal-grid">
+                    <label className="radio"><input type="radio" name="meal" value="Мясо" required /><span>Мясо</span></label>
+                    <label className="radio"><input type="radio" name="meal" value="Рыба" /><span>Рыба</span></label>
+                    <label className="radio"><input type="radio" name="meal" value="Без разницы" /><span>Без разницы</span></label>
+                  </div>
+                </fieldset>
+              </div>
+            )}
             <label>Пожелания<textarea name="note" maxLength={1000} rows={3} placeholder="Аллергии, любимая песня или пара теплых слов" /></label>
             <label className="honeypot" aria-hidden="true">Ваш сайт<input name="website" tabIndex={-1} autoComplete="off" /></label>
             {formError && <p className="form-error" role="alert">{formError}</p>}
