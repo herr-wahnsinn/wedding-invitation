@@ -224,6 +224,10 @@ footer div { display: flex; justify-content: space-between; border-top: 1px soli
 @keyframes spin { to { transform: rotate(360deg); } }
 .reveal { animation: reveal .9s ease-out both; } @keyframes reveal { from { opacity: 0; transform: translateY(18px); } }
 
+@media (min-width: 851px) {
+  .dress-code { align-items: start; }
+}
+
 @media (max-width: 850px) {
   .topbar { height: 68px; padding: 0 20px; grid-template-columns: 1fr 1fr; }.topbar nav { display: none; }.mini-rsvp { font-size: 11px; }
   .hero { padding: 96px 20px 48px; grid-template-columns: 1fr; min-height: auto; }.guest-greeting { min-width: min(350px, 90%); }.guest-hero-name { font-size: clamp(30px, 9vw, 42px); }.hero h1 { font-size: clamp(68px, 23vw, 116px); margin-top: 20px; row-gap: .11em; }.hero h1 span:last-child { margin-left: 24%; }.hero h1 i { left: 5%; top: 52%; transform: translateY(-20%); }.hero-meta { margin-left: 24%; gap: 28px; font-size: 15px; }.primary-link { margin-left: 24%; }.hero-art { min-height: 550px; margin-top: 35px; }.portrait-frame { width: min(87%, 470px); }.date-stamp { right: 0; top: 10%; width: 96px; height: 96px; }.flower-one { left: -2%; }.scroll-note { display: none; }
