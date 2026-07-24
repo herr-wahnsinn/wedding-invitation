@@ -10,6 +10,7 @@
   --chocolate: #2b1918;
   --sage: #9a9b7d;
   --serif: "Iowan Old Style", "Baskerville", "Times New Roman", serif;
+  --display: "Bodoni 72", "Didot", "Bodoni MT", "Times New Roman", serif;
   --sans: "Avenir Next", "Segoe UI Variable", "Segoe UI", "Trebuchet MS", sans-serif;
   --script: "Snell Roundhand", "Segoe Script", cursive;
 }
@@ -35,7 +36,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .eyebrow, .section-number { margin: 0; font-size: 11px; font-weight: 600; letter-spacing: .17em; text-transform: uppercase; }
 .eyebrow { display: flex; align-items: center; gap: 12px; }
 .eyebrow::before { content: ""; width: 28px; height: 1px; background: var(--red); }
-.hero h1 { margin: 24px 0 30px; font: 400 clamp(76px, 9.5vw, 160px)/.72 var(--serif); letter-spacing: -.075em; display: grid; row-gap: .13em; position: relative; }
+.hero h1 { margin: 24px 0 30px; font: 400 clamp(76px, 9.5vw, 160px)/.76 var(--display); letter-spacing: -.055em; display: grid; row-gap: .13em; position: relative; }
 .hero h1 span { display: block; }
 .hero h1 span:last-child { margin-left: 25%; }
 .hero h1 i { color: var(--red); font-family: var(--script); font-size: .52em; font-weight: 400; position: absolute; left: 7%; top: 51%; transform: translateY(-20%); z-index: 2; }
@@ -165,6 +166,10 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .color-name { position: absolute; left: 50%; bottom: calc(100% + 12px); width: max-content; max-width: 145px; padding: 8px 10px; border-radius: 2px; background: var(--chocolate); color: var(--paper); font: 600 10px/1.25 var(--sans); letter-spacing: .06em; text-transform: uppercase; opacity: 0; visibility: hidden; transform: translate(-50%, 5px); transition: opacity .2s ease, transform .2s ease, visibility .2s; pointer-events: none; }
 .color-name::after { content: ""; position: absolute; left: 50%; top: 100%; transform: translateX(-50%); border: 5px solid transparent; border-top-color: var(--chocolate); }
 .palette-color:hover .color-name, .palette-color:focus-visible .color-name, .palette-color:focus .color-name { opacity: 1; visibility: visible; transform: translate(-50%, 0); }
+.flower-request { display: grid; grid-template-columns: 28px 1fr; gap: 14px; padding: 22px 0 0; border-top: 1px solid rgba(43,25,24,.18); }
+.flower-request > span { color: var(--red); font-size: 18px; line-height: 1.4; }
+.flower-request p { margin: 0; font: 400 14px/1.65 var(--serif); }
+.flower-request strong { display: block; margin-bottom: 5px; color: var(--wine); font: 600 10px/1.4 var(--sans); letter-spacing: .12em; text-transform: uppercase; }
 
 .rsvp { padding: 150px 7vw; display: grid; grid-template-columns: 42% 47%; gap: 11%; background: var(--blush); }
 .rsvp-copy .script-note { margin-top: 76px; }.rsvp-copy > p:last-child { margin-top: 34px; max-width: 270px; font: 14px/1.6 var(--serif); }
@@ -185,6 +190,11 @@ fieldset legend { margin: 0 0 12px; }
 .field-hint { margin: -7px 0 2px; color: rgba(43,25,24,.62); font: 12px/1.4 var(--sans); }
 .choice-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 18px; }
 .meal-grid { grid-template-columns: repeat(3, 1fr); }
+.wine-options { margin-top: 5px; padding: 17px 18px 15px; border-left: 2px solid var(--wine); background: rgba(255,250,244,.26); animation: reveal .25s ease-out both; }
+.wine-options > p { margin: 0 0 12px; color: var(--wine); font: 600 10px/1.4 var(--sans); letter-spacing: .1em; text-transform: uppercase; }
+.wine-grid { grid-template-columns: repeat(3, 1fr); }
+.other-drink { margin-top: 9px; }
+.other-drink input { padding-top: 8px; font-size: 15px; }
 .submit-button { margin-top: 8px; border: 0; background: var(--wine); color: white; padding: 18px 22px; text-transform: uppercase; letter-spacing: .11em; font-size: 11px; font-weight: 600; cursor: pointer; display: flex; justify-content: space-between; transition: background .25s, transform .25s; }
 .submit-button:hover { background: var(--chocolate); transform: translateY(-2px); }
 .submit-button:disabled { opacity: .65; cursor: wait; transform: none; }
@@ -200,7 +210,7 @@ fieldset legend { margin: 0 0 12px; }
 
 footer { padding: 120px 7vw 44px; background: var(--wine); color: var(--paper); text-align: center; }
 footer > p { font: 28px var(--script); margin: 0; color: var(--blush); transform: rotate(-3deg); }
-footer h2 { font: 400 clamp(64px, 10vw, 160px)/1 var(--serif); margin: 10px 0 80px; letter-spacing: -.07em; }
+footer h2 { font: 400 clamp(64px, 10vw, 160px)/1 var(--display); margin: 10px 0 80px; letter-spacing: -.045em; }
 footer div { display: flex; justify-content: space-between; border-top: 1px solid rgba(255,255,255,.3); padding-top: 18px; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .13em; }
 
 @keyframes sway { from { translate: 0 -5px; rotate: -2deg; } to { translate: 7px 10px; rotate: 4deg; } }
@@ -223,7 +233,7 @@ footer div { display: flex; justify-content: space-between; border-top: 1px soli
   .hero { padding-left: 16px; padding-right: 16px; }.hero h1 { font-size: 21vw; row-gap: .15em; }.hero h1 span:last-child { margin-left: 18%; }.hero h1 i { left: 3%; top: 53%; transform: translateY(-22%); }.hero-meta, .hero .primary-link { margin-left: 18%; }.hero-art { min-height: 455px; }.portrait-frame { width: 86%; }.figure { height: 55%; }.date-stamp { width: 82px; height: 82px; }.date-stamp strong { font-size: 35px; }.flower { width: 78px; height: 78px; }.portrait-caption { font-size: 14px; }.primary-link { width: 82%; }
   .intro h2, .section-heading h2, .dress-code h2 { font-size: 40px; }.script-note { font-size: 25px; }.timeline-item { grid-template-columns: 66px 1fr 8px; }.time { font-size: 22px; }.timeline p { font-size: 12px; }
   .location-card h2 { font-size: 49px; }.map-art { min-height: 510px; }.map-link-label { right: 16px; left: 16px; bottom: 16px; text-align: center; }.route-river { height: 54px; }.route-river span { display: none; }.route-road span { font-size: 7px; }.route-kamennoostrovsky { left: 34%; width: 63px; }.route-monetnaya { top: 65%; height: 50px; }.walk-segment-one { left: 45%; top: 24%; height: 43%; }.walk-segment-two { left: 46%; top: 65.5%; width: 26%; }.route-turn { left: 45%; top: 64.5%; }.route-start { left: 9%; top: 16%; gap: 7px; }.route-start p { padding: 7px 8px; }.route-start strong { font-size: 15px; }.metro-symbol { width: 39px; height: 39px; }.route-finish { left: 60%; top: 54%; display: block; }.route-finish p { position: absolute; left: -40px; top: 57px; width: 145px; margin: 0; padding: 6px 8px; text-align: center; }.route-finish strong { font-size: 13px; white-space: normal; }.route-pin { width: 56px; height: 56px; }.route-duration { left: 16px; bottom: 74px; padding: 9px 11px; }.route-duration strong { font-size: 19px; }.route-north { right: 5%; top: 5%; }
-  .rsvp h2 { font-size: 49px; }.choice-grid, .meal-grid { grid-template-columns: 1fr; gap: 5px; }.survey-details { padding: 22px 18px; }.success { padding: 30px 20px; }footer div { flex-direction: column; gap: 8px; align-items: center; text-align: center; }
+  .rsvp h2 { font-size: 49px; }.choice-grid, .meal-grid, .wine-grid { grid-template-columns: 1fr; gap: 5px; }.survey-details { padding: 22px 18px; }.success { padding: 30px 20px; }footer div { flex-direction: column; gap: 8px; align-items: center; text-align: center; }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -57,6 +57,7 @@ export default function Home() {
   const [submitting, setSubmitting] = useState(false);
   const [formError, setFormError] = useState("");
   const [attendanceChoice, setAttendanceChoice] = useState<"yes" | "no" | "">("");
+  const [wineSelected, setWineSelected] = useState(false);
 
   useEffect(() => {
     const token = new URLSearchParams(window.location.search).get("invite")?.trim() ?? "";
@@ -92,9 +93,16 @@ export default function Home() {
 
     const formData = new FormData(event.currentTarget);
     const attendance = String(formData.get("attendance") ?? "");
-    const drinks = formData.getAll("drinks").map(String);
+    const wineTypes = formData.getAll("wineTypes").map(String);
+    const drinks = [...formData.getAll("drinks").map(String), ...wineTypes];
+    const otherDrink = String(formData.get("otherDrink") ?? "").trim();
 
-    if (attendance === "yes" && drinks.length === 0) {
+    if (attendance === "yes" && wineSelected && wineTypes.length === 0) {
+      setFormError("Пожалуйста, выберите предпочитаемый вид вина.");
+      return;
+    }
+
+    if (attendance === "yes" && drinks.length === 0 && !otherDrink) {
       setFormError("Пожалуйста, выберите хотя бы один вариант напитков.");
       return;
     }
@@ -109,6 +117,7 @@ export default function Home() {
           token: inviteToken,
           attendance,
           drinks,
+          otherDrink,
           meal: formData.get("meal"),
           note: formData.get("note"),
           website: formData.get("website"),
@@ -133,7 +142,7 @@ export default function Home() {
           <a href="#program">Программа</a>
           <a href="#details">Детали</a>
         </nav>
-        <a className="mini-rsvp" href="#rsvp">RSVP <span aria-hidden="true">↘</span></a>
+        <a className="mini-rsvp" href="#rsvp">Анкета <span aria-hidden="true">↘</span></a>
       </header>
 
       <section className="hero" id="top">
@@ -145,7 +154,7 @@ export default function Home() {
             <p>{wedding.city}</p>
           </div>
           <a className="primary-link" href="#rsvp">
-            <span className="primary-link-copy"><strong>Заполнить анкету</strong><small>RSVP · займёт 2 минуты</small></span>
+            <span className="primary-link-copy"><strong>Заполнить анкету</strong><small>Займёт около 2 минут</small></span>
             <span className="primary-link-arrow" aria-hidden="true">→</span>
           </a>
         </div>
@@ -262,6 +271,10 @@ export default function Home() {
               </button>
             ))}
           </div>
+          <aside className="flower-request">
+            <span aria-hidden="true">✦</span>
+            <p><strong>Небольшая просьба</strong>Пожалуйста, не беспокойтесь о цветах. Будем очень благодарны, если вы придёте без букетов — самым ценным подарком для нас станут ваше присутствие, тёплые слова и воспоминания, которые мы создадим вместе.</p>
+          </aside>
         </div>
       </section>
 
@@ -306,15 +319,26 @@ export default function Home() {
                   <p className="field-hint">Можно выбрать несколько вариантов</p>
                   <div className="choice-grid">
                     <label className="check"><input type="checkbox" name="drinks" value="Игристое" /><span>Игристое</span></label>
-                    <label className="check"><input type="checkbox" name="drinks" value="Вино" /><span>Вино</span></label>
+                    <label className="check"><input type="checkbox" checked={wineSelected} onChange={(event) => setWineSelected(event.target.checked)} /><span>Вино</span></label>
                     <label className="check"><input type="checkbox" name="drinks" value="Крепкий алкоголь" /><span>Крепкий алкоголь</span></label>
                     <label className="check"><input type="checkbox" name="drinks" value="Безалкогольные" /><span>Безалкогольные</span></label>
                   </div>
+                  {wineSelected && (
+                    <div className="wine-options">
+                      <p>Какое вино предпочитаете?</p>
+                      <div className="choice-grid wine-grid">
+                        <label className="check"><input type="checkbox" name="wineTypes" value="Белое вино" /><span>Белое</span></label>
+                        <label className="check"><input type="checkbox" name="wineTypes" value="Красное вино" /><span>Красное</span></label>
+                        <label className="check"><input type="checkbox" name="wineTypes" value="Розовое вино" /><span>Розовое</span></label>
+                      </div>
+                    </div>
+                  )}
+                  <label className="other-drink">Другой вариант<input name="otherDrink" maxLength={120} placeholder="Напишите свой вариант напитка" /></label>
                 </fieldset>
                 <fieldset className="survey-fieldset">
                   <legend>Что предпочитаете на горячее?</legend>
                   <div className="choice-grid meal-grid">
-                    <label className="radio"><input type="radio" name="meal" value="Мясо" required /><span>Мясо</span></label>
+                    <label className="radio"><input type="radio" name="meal" value="Курица" required /><span>Курица</span></label>
                     <label className="radio"><input type="radio" name="meal" value="Рыба" /><span>Рыба</span></label>
                     <label className="radio"><input type="radio" name="meal" value="Без разницы" /><span>Без разницы</span></label>
                   </div>
