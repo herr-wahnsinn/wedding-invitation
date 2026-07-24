@@ -14,19 +14,20 @@ export async function POST(request: Request) {
     const drinks = Array.isArray(body.drinks)
       ? body.drinks.map((value) => cleanText(value, 40)).filter(Boolean)
       : [];
+    const otherDrink = cleanText(body.otherDrink, 120);
     const meal = cleanText(body.meal, 30);
     const note = cleanText(body.note, 1000);
     const website = cleanText(body.website, 200);
 
     if (website) return Response.json({ ok: true });
 
-    const allowedDrinks = ["Игристое", "Вино", "Крепкий алкоголь", "Безалкогольные"];
-    const allowedMeals = ["Мясо", "Рыба", "Без разницы"];
+    const allowedDrinks = ["Игристое", "Вино", "Белое вино", "Красное вино", "Розовое вино", "Крепкий алкоголь", "Безалкогольные"];
+    const allowedMeals = ["Мясо", "Курица", "Рыба", "Без разницы"];
 
     if (
       !TOKEN_PATTERN.test(token) ||
       !["yes", "no"].includes(attendance) ||
-      (attendance === "yes" && drinks.length === 0) ||
+      (attendance === "yes" && drinks.length === 0 && !otherDrink) ||
       drinks.some((drink) => !allowedDrinks.includes(drink)) ||
       (attendance === "yes" && !allowedMeals.includes(meal)) ||
       (attendance === "no" && Boolean(meal) && !allowedMeals.includes(meal))
@@ -34,8 +35,9 @@ export async function POST(request: Request) {
       return Response.json({ error: "Проверьте обязательные поля" }, { status: 400 });
     }
 
+    const savedDrinks = [...drinks, ...(otherDrink ? [`Другое: ${otherDrink}`] : [])];
     const responseNote = [
-      attendance === "yes" ? `Напитки: ${drinks.join(", ")}` : "",
+      attendance === "yes" ? `Напитки: ${savedDrinks.join(", ")}` : "",
       attendance === "yes" ? `Горячее: ${meal}` : "",
       note ? `Пожелания: ${note}` : "",
     ]
@@ -45,7 +47,7 @@ export async function POST(request: Request) {
     await callGoogleScript("rsvp", {
       token,
       attendance,
-      drinks,
+      drinks: savedDrinks,
       meal,
       note: responseNote,
     });
