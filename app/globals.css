@@ -214,6 +214,12 @@ fieldset legend { margin: 0 0 12px; }
 .invite-note h3 { margin: 20px 0 10px; font: 400 38px/1 var(--serif); }
 .invite-note p { max-width: 380px; margin: 0; font: 16px/1.6 var(--serif); }
 .invite-loader { width: 34px; height: 34px; border: 1px solid rgba(43,25,24,.2); border-top-color: var(--wine); border-radius: 50%; animation: spin .8s linear infinite; margin-bottom: 20px; }
+.access-gate { min-height: 100svh; display: grid; place-items: center; padding: 24px; background: var(--ivory); }
+.access-gate-card { width: min(680px, 100%); min-height: min(560px, calc(100svh - 48px)); display: grid; place-content: center; justify-items: center; padding: clamp(42px, 8vw, 96px); border: 1px solid rgba(43,25,24,.18); text-align: center; background: rgba(255,255,255,.16); }
+.access-gate-card .section-number { margin: 18px 0 28px; }
+.access-gate-card h1 { max-width: 590px; margin: 0; color: var(--chocolate); font: 400 clamp(43px, 7vw, 82px)/.95 var(--serif); letter-spacing: -.04em; }
+.access-gate-card > p:last-child { max-width: 440px; margin: 28px 0 0; font: 17px/1.6 var(--serif); }
+.access-gate-symbol { color: var(--wine); font-size: 34px; }
 
 footer { padding: 120px 7vw 44px; background: var(--wine); color: var(--paper); text-align: center; }
 footer > p { font: 28px var(--script); margin: 0; color: var(--blush); transform: rotate(-3deg); }

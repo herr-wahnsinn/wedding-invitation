@@ -139,6 +139,32 @@ export default function Home() {
     }
   }
 
+  if (inviteState !== "ready") {
+    const isChecking = inviteState === "idle" || inviteState === "loading";
+
+    return (
+      <main className="access-gate">
+        <div className="access-gate-card" role="status">
+          {isChecking ? (
+            <>
+              <span className="invite-loader" aria-hidden="true" />
+              <p className="section-number">Андрей & Лилия</p>
+              <h1>Проверяем приглашение…</h1>
+              <p>Пожалуйста, подождите несколько секунд.</p>
+            </>
+          ) : (
+            <>
+              <span className="access-gate-symbol" aria-hidden="true">✦</span>
+              <p className="section-number">Закрытое приглашение</p>
+              <h1>Вход только<br />по персональной ссылке</h1>
+              <p>Пожалуйста, откройте ссылку, которую Андрей и Лилия отправили вам лично.</p>
+            </>
+          )}
+        </div>
+      </main>
+    );
+  }
+
   return (
     <main>
       <header className="topbar">
@@ -295,18 +321,7 @@ export default function Home() {
           <p>Пожалуйста, дайте ответ, как только определитесь.</p>
         </div>
 
-        {inviteState === "loading" ? (
-          <div className="invite-note" role="status">
-            <span className="invite-loader" aria-hidden="true" />
-            <p>Готовим ваше персональное приглашение…</p>
-          </div>
-        ) : inviteState === "invalid" ? (
-          <div className="invite-note" role="status">
-            <span>✦</span>
-            <h3>Нужна персональная ссылка</h3>
-            <p>Пожалуйста, откройте ссылку, которую мы отправили вам лично. Так ответ попадёт в правильную строку списка гостей.</p>
-          </div>
-        ) : sent ? (
+        {sent ? (
           <div className="success" role="status">
             <span>✓</span>
             <h3>Ответ принят</h3>
