@@ -153,7 +153,10 @@ export default function Home() {
 
       <section className="hero" id="top">
         <div className="hero-copy reveal">
-          <p className="eyebrow">{guest ? `${guest.firstName}, мы женимся` : "Мы женимся"}</p>
+          <div className="guest-greeting">
+            <p className="eyebrow">Персональное приглашение для</p>
+            <p className="guest-hero-name">{guest?.firstName ?? "дорогих гостей"}</p>
+          </div>
           <h1><span>{wedding.firstName}</span><i>&</i><span>{wedding.secondName}</span></h1>
           <div className="hero-meta">
             <p>{wedding.date}</p>
