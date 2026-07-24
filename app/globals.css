@@ -190,8 +190,11 @@ fieldset legend { margin: 0 0 12px; }
 .field-hint { margin: -7px 0 2px; color: rgba(43,25,24,.62); font: 12px/1.4 var(--sans); }
 .choice-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 18px; }
 .meal-grid { grid-template-columns: repeat(3, 1fr); }
-.wine-options { margin-top: 5px; padding: 17px 18px 15px; border-left: 2px solid var(--wine); background: rgba(255,250,244,.26); animation: reveal .25s ease-out both; }
-.wine-options > p { margin: 0 0 12px; color: var(--wine); font: 600 10px/1.4 var(--sans); letter-spacing: .1em; text-transform: uppercase; }
+.wine-options { display: grid; gap: 18px; margin-top: 5px; padding: 17px 18px 15px; border-left: 2px solid var(--wine); background: rgba(255,250,244,.26); animation: reveal .25s ease-out both; }
+.wine-step + .wine-step { padding-top: 17px; border-top: 1px solid rgba(43,25,24,.13); }
+.wine-step > p { display: flex; align-items: center; gap: 8px; margin: 0 0 12px; color: var(--wine); font: 600 10px/1.4 var(--sans); letter-spacing: .1em; text-transform: uppercase; }
+.wine-step > p span { width: 19px; height: 19px; display: grid; place-content: center; border-radius: 50%; background: var(--wine); color: var(--paper); font-size: 9px; }
+.wine-sweetness-grid { grid-template-columns: repeat(2, 1fr); }
 .wine-grid { grid-template-columns: repeat(3, 1fr); }
 .other-drink { margin-top: 9px; }
 .other-drink input { padding-top: 8px; font-size: 15px; }
@@ -233,7 +236,7 @@ footer div { display: flex; justify-content: space-between; border-top: 1px soli
   .hero { padding-left: 16px; padding-right: 16px; }.hero h1 { font-size: 21vw; row-gap: .15em; }.hero h1 span:last-child { margin-left: 18%; }.hero h1 i { left: 3%; top: 53%; transform: translateY(-22%); }.hero-meta, .hero .primary-link { margin-left: 18%; }.hero-art { min-height: 455px; }.portrait-frame { width: 86%; }.figure { height: 55%; }.date-stamp { width: 82px; height: 82px; }.date-stamp strong { font-size: 35px; }.flower { width: 78px; height: 78px; }.portrait-caption { font-size: 14px; }.primary-link { width: 82%; }
   .intro h2, .section-heading h2, .dress-code h2 { font-size: 40px; }.script-note { font-size: 25px; }.timeline-item { grid-template-columns: 66px 1fr 8px; }.time { font-size: 22px; }.timeline p { font-size: 12px; }
   .location-card h2 { font-size: 49px; }.map-art { min-height: 510px; }.map-link-label { right: 16px; left: 16px; bottom: 16px; text-align: center; }.route-river { height: 54px; }.route-river span { display: none; }.route-road span { font-size: 7px; }.route-kamennoostrovsky { left: 34%; width: 63px; }.route-monetnaya { top: 65%; height: 50px; }.walk-segment-one { left: 45%; top: 24%; height: 43%; }.walk-segment-two { left: 46%; top: 65.5%; width: 26%; }.route-turn { left: 45%; top: 64.5%; }.route-start { left: 9%; top: 16%; gap: 7px; }.route-start p { padding: 7px 8px; }.route-start strong { font-size: 15px; }.metro-symbol { width: 39px; height: 39px; }.route-finish { left: 60%; top: 54%; display: block; }.route-finish p { position: absolute; left: -40px; top: 57px; width: 145px; margin: 0; padding: 6px 8px; text-align: center; }.route-finish strong { font-size: 13px; white-space: normal; }.route-pin { width: 56px; height: 56px; }.route-duration { left: 16px; bottom: 74px; padding: 9px 11px; }.route-duration strong { font-size: 19px; }.route-north { right: 5%; top: 5%; }
-  .rsvp h2 { font-size: 49px; }.choice-grid, .meal-grid, .wine-grid { grid-template-columns: 1fr; gap: 5px; }.survey-details { padding: 22px 18px; }.success { padding: 30px 20px; }footer div { flex-direction: column; gap: 8px; align-items: center; text-align: center; }
+  .rsvp h2 { font-size: 49px; }.choice-grid, .meal-grid, .wine-grid, .wine-sweetness-grid { grid-template-columns: 1fr; gap: 5px; }.survey-details { padding: 22px 18px; }.success { padding: 30px 20px; }footer div { flex-direction: column; gap: 8px; align-items: center; text-align: center; }
 }
 
 @media (prefers-reduced-motion: reduce) {

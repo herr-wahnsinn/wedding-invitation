@@ -93,12 +93,18 @@ export default function Home() {
 
     const formData = new FormData(event.currentTarget);
     const attendance = String(formData.get("attendance") ?? "");
-    const wineTypes = formData.getAll("wineTypes").map(String);
-    const drinks = [...formData.getAll("drinks").map(String), ...wineTypes];
+    const wineSweetness = formData.getAll("wineSweetness").map(String);
+    const wineColors = formData.getAll("wineColors").map(String);
+    const drinks = [...formData.getAll("drinks").map(String), ...wineSweetness, ...wineColors];
     const otherDrink = String(formData.get("otherDrink") ?? "").trim();
 
-    if (attendance === "yes" && wineSelected && wineTypes.length === 0) {
-      setFormError("Пожалуйста, выберите предпочитаемый вид вина.");
+    if (attendance === "yes" && wineSelected && wineSweetness.length === 0) {
+      setFormError("Пожалуйста, укажите предпочитаемую степень сладости вина.");
+      return;
+    }
+
+    if (attendance === "yes" && wineSelected && wineColors.length === 0) {
+      setFormError("Пожалуйста, выберите предпочитаемый цвет вина.");
       return;
     }
 
@@ -325,11 +331,22 @@ export default function Home() {
                   </div>
                   {wineSelected && (
                     <div className="wine-options">
-                      <p>Какое вино предпочитаете?</p>
-                      <div className="choice-grid wine-grid">
-                        <label className="check"><input type="checkbox" name="wineTypes" value="Белое вино" /><span>Белое</span></label>
-                        <label className="check"><input type="checkbox" name="wineTypes" value="Красное вино" /><span>Красное</span></label>
-                        <label className="check"><input type="checkbox" name="wineTypes" value="Розовое вино" /><span>Розовое</span></label>
+                      <div className="wine-step">
+                        <p><span>1</span>По степени сладости</p>
+                        <div className="choice-grid wine-sweetness-grid">
+                          <label className="check"><input type="checkbox" name="wineSweetness" value="Сухое вино" /><span>Сухое</span></label>
+                          <label className="check"><input type="checkbox" name="wineSweetness" value="Полусухое вино" /><span>Полусухое</span></label>
+                          <label className="check"><input type="checkbox" name="wineSweetness" value="Полусладкое вино" /><span>Полусладкое</span></label>
+                          <label className="check"><input type="checkbox" name="wineSweetness" value="Сладкое вино" /><span>Сладкое</span></label>
+                        </div>
+                      </div>
+                      <div className="wine-step">
+                        <p><span>2</span>Цвет вина</p>
+                        <div className="choice-grid wine-grid">
+                          <label className="check"><input type="checkbox" name="wineColors" value="Белое вино" /><span>Белое</span></label>
+                          <label className="check"><input type="checkbox" name="wineColors" value="Красное вино" /><span>Красное</span></label>
+                          <label className="check"><input type="checkbox" name="wineColors" value="Розовое вино" /><span>Розовое</span></label>
+                        </div>
                       </div>
                     </div>
                   )}
