@@ -39,7 +39,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .guest-greeting { width: fit-content; min-width: min(360px, 82%); padding: 4px 0 5px 18px; border-left: 2px solid var(--wine); }
 .guest-greeting .eyebrow { color: var(--wine); }
 .guest-greeting .eyebrow::before { display: none; }
-.guest-hero-name { margin: 8px 0 0; color: var(--chocolate); font: 400 clamp(31px, 3.2vw, 48px)/1 var(--serif); letter-spacing: -.025em; }
+.guest-hero-name { margin: 0 0 9px; color: var(--chocolate); font: 400 clamp(31px, 3.2vw, 48px)/1 var(--serif); letter-spacing: -.025em; }
 .hero h1 { margin: 24px 0 30px; font: 400 clamp(76px, 9.5vw, 160px)/.76 var(--display); letter-spacing: -.055em; display: grid; row-gap: .13em; position: relative; }
 .hero h1 span { display: block; }
 .hero h1 span:last-child { margin-left: 25%; }
